@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameScreenActivity"
+    android:background="@color/backgroundBlack">
+
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/firstRow"
+        android:layout_marginBottom="40dp"
+        android:layout_above="@+id/secondRow">
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/firstButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/secondButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/thirdButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@id/secondRow"
+        android:layout_marginBottom="40dp"
+        android:layout_centerInParent="true">
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/fourthButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/fifthButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/sixthButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/thirdRow"
+    android:layout_marginBottom="40dp"
+    android:layout_below="@id/secondRow">
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/seventhButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_alignParentLeft="true"/>
+
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/eighthButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:id="@+id/ninthButton"
+            android:background="@color/gameGreen"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>

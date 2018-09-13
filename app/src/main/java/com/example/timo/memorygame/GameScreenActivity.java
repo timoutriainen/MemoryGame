@@ -25,6 +25,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
                                 R.id.sixthButton, R.id.seventhButton, R.id.eighthButton, R.id.ninthButton};
     private int delayValue = 300;
     private Random random;
+    Button clickedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +70,10 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             finish();
         } else {
             Log.d(TAG, "GameScreenActivity::onClick() - correct button");
-            Button clickedButton = findViewById(v.getId());
+            clickedButton = findViewById(v.getId());
             clickedButton.setBackgroundColor(getResources().getColor(R.color.gameRed, null));
+            ConfirmLogic confirm = new ConfirmLogic();
+            confirm.execute(null, null, null);
             Log.d(TAG, "GameScreenActivity::onClick() - button is now red");
             clickedButton.setBackgroundColor(getResources().getColor(R.color.gameGreen, null));
             Log.d(TAG, "GameScreenActivity::onClick() - button is now green");
@@ -83,6 +86,51 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
                 GameLogic temp = new GameLogic();
                 temp.execute(null, null, null);
             }
+        }
+    }
+
+    private class ConfirmLogic extends AsyncTask<Void, Void, Void> {
+
+        private boolean isRed = false;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d(TAG, "ConfirmLogic::doInBackground()");
+            isRed = true;
+            Log.d(TAG, "ConfirmLogic::doInBackground() - set to red");
+            publishProgress();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                finish();
+            }
+            isRed = false;
+            Log.d(TAG, "ConfirmLogic::doInBackground() - set to green");
+            publishProgress();
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            Log.d(TAG, "ConfirmLogic::onProgressUpdate()");
+            if (!isRed) {
+                clickedButton.setBackgroundColor(getResources().getColor(R.color.gameGreen, null));
+            } else {
+                clickedButton.setBackgroundColor(getResources().getColor(R.color.gameRed, null));
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Log.d(TAG, "ConfirmLogic::onPreExecute()");
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Log.d(TAG, "ConfirmLogic:onPostExecute()");
         }
     }
 

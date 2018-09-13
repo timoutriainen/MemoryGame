@@ -17,7 +17,7 @@ public class StartGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate()");
+        Log.d(TAG, "StartGameActivity::onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
         resultView = findViewById(R.id.bestResultTextView);
@@ -33,6 +33,7 @@ public class StartGameActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "StartGameActivity::onActivityResult()");
         if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
                 int result = data.getIntExtra("result", 0);

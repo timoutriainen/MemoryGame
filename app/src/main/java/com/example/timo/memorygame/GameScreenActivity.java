@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
     private final static String TAG = "MyActivity";
     private boolean isShowing = false, gameLost = false;
     private int currentScore, currentIndex = 0;
-    private List<Integer> buttonList = new ArrayList<>();
+    private List<Integer> buttonsToPress = new ArrayList<>();
     private Button[] buttons;
     private int[] button_ids = {R.id.firstButton, R.id.secondButton, R.id.thirdButton, R.id.fourthButton, R.id.fifthButton,
                                 R.id.sixthButton, R.id.seventhButton, R.id.eighthButton, R.id.ninthButton};
@@ -39,17 +38,34 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
         }
         random = new Random();
         for (int i = 0; i < 3; i++) {
-            createNextNumber();
+            buttonsToPress.add(giveNumberBetweenZeroAndEight());
         }
         setResult(RESULT_CANCELED);
         GameLogic temp = new GameLogic();
         temp.execute(null,null,null);
     }
 
-    private void createNextNumber() {
-        Log.d(TAG, "GameScreenActivity::createNextNumber()");
-        int temp = random.nextInt(9) + 1;
-        buttonList.add(temp);
+    private int giveNumberBetweenZeroAndEight() {
+        int temp = random.nextInt(9);
+        Log.d(TAG, "GameScreenActivity::giveNumberBetweenZeroAndEight() - returning " + temp);
+        return temp;
+    }
+
+    private int getIndexOfButtonBasedOnViewId(int viewId) {
+        for (int i = 0; i < 9; i++) {
+            if(button_ids[i] == viewId) {
+                return i+1;
+            }
+        }
+        return 0;
+    }
+
+    private int findButtonIdBasedOnIndex(int index) {
+        for(int i = 0; i < 9; i++) {
+            Log.d(TAG, "GameScreenActivity::findButtonIdBasedOnIndex() - button_id at " + i + " is " + button_ids[i]);
+        }
+        Log.d(TAG, "GameScreenActivity::findButtonIdBasedOnIndex() - returning buttonId " + button_ids[buttonsToPress.get(index)]);
+        return button_ids[buttonsToPress.get(index)];
     }
 
     @Override
@@ -59,9 +75,10 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             Log.d(TAG, "GameScreenActivity::onClick() - isShowing is true, returning");
             return;
         }
-
-        if (v.getId() != button_ids[buttonList.get(currentIndex)-1]) {
-            Log.d(TAG, "GameScreenActivity::onClick() - wrong button");
+        Log.d(TAG, "GameScreenActivity::onClick() - expecting " + buttonsToPress.get(currentIndex));
+        Log.d(TAG, "GameScreenActivity::onClick() - got " + getIndexOfButtonBasedOnViewId(v.getId()));
+        if (v.getId() != findButtonIdBasedOnIndex(currentIndex)) {
+            Log.d(TAG, "GameScreenActivity::onClick() - wrong button " + v.getId() + " instead of " + button_ids[buttonsToPress.get(currentIndex)]);
             gameLost = true;
             Toast.makeText(this, "Sorry, you lost!!! Your score:"+currentScore, Toast.LENGTH_SHORT).show();
             Intent data = new Intent();
@@ -78,9 +95,9 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             clickedButton.setBackgroundColor(getResources().getColor(R.color.gameGreen, null));
             Log.d(TAG, "GameScreenActivity::onClick() - button is now green");
             currentIndex++;
-            if (currentIndex == buttonList.size()) {
+            if (currentIndex == buttonsToPress.size()) {
                 currentScore++;
-                createNextNumber();
+                buttonsToPress.add(giveNumberBetweenZeroAndEight());
                 currentIndex = 0;
                 Toast.makeText(this, "Next round", Toast.LENGTH_SHORT).show();
                 GameLogic temp = new GameLogic();
@@ -134,7 +151,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private class GameLogic extends AsyncTask<Void, Void, Void> {
+    private class GameLogic extends AsyncTask<Void, Integer, Void> {
 
         private boolean isRed = false;
         private int currentButton = 0;
@@ -147,20 +164,20 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             } catch (InterruptedException e) {
                 finish();
             }
-
-            for (int i = 0; i < buttonList.size(); i++) {
-                currentButton = buttonList.get(i);
-                Log.d(TAG, "GameLogic::doInBackground() - set to red");
+            Log.d(TAG, "GameLogic::doInBackground() - buttonsToPress.size() is " + buttonsToPress.size());
+            for (int i = 0; i < buttonsToPress.size(); i++) {
+                currentButton = buttonsToPress.get(i);
+                Log.d(TAG, "GameLogic::doInBackground() - set button with index " + currentButton + " to red");
                 isRed = true;
-                publishProgress();
+                publishProgress(currentButton);
                 try {
                     Thread.sleep(delayValue);
                 } catch (InterruptedException e) {
                     finish();
                 }
-                Log.d(TAG, "GameLogic::doInBackground() - set to green");
+                Log.d(TAG, "GameLogic::doInBackground() - set button with index " + currentButton + " to green");
                 isRed = false;
-                publishProgress();
+                publishProgress(currentButton);
                 try {
                     Thread.sleep(delayValue);
                 } catch (InterruptedException e) {
@@ -171,13 +188,16 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
         }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
+        protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            Log.d(TAG, "GameLogic::onProgressUpdate()");
-            Button temp = findViewById(button_ids[currentButton-1]);
+            Log.d(TAG, "GameLogic::onProgressUpdate() - toggle color of button with index : " + values[0]);
+            int buttonIndex = values[0];
+            Button temp = findViewById(button_ids[buttonIndex]);
             if (isRed) {
+                Log.d(TAG, "GameLogic::onProgressUpdate() - set button with index " + buttonIndex + " to red");
                 temp.setBackgroundColor(getResources().getColor(R.color.gameRed, null));
             } else {
+                Log.d(TAG, "GameLogic::onProgressUpdate() - set button with index " + buttonIndex + " to green");
                 temp.setBackgroundColor(getResources().getColor(R.color.gameGreen, null));
             }
         }

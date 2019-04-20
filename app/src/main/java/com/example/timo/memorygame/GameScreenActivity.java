@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
                                 R.id.sixthButton, R.id.seventhButton, R.id.eighthButton, R.id.ninthButton};
     private int delayValue = 300;
     private Random random;
+    private TextView resultView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             buttons[i] = findViewById(button_ids[i]);
             buttons[i].setOnClickListener(this);
         }
+        resultView = findViewById(R.id.currentResultTextView);
         random = new Random();
         for (int i = 0; i < 3; i++) {
             buttonsToPress.add(giveNumberBetweenZeroAndEight());
@@ -91,6 +94,7 @@ public class GameScreenActivity extends AppCompatActivity implements View.OnClic
             currentIndex++;
             if (currentIndex == buttonsToPress.size()) {
                 currentScore++;
+                resultView.setText("Your current result is:" + currentScore);
                 buttonsToPress.add(giveNumberBetweenZeroAndEight());
                 currentIndex = 0;
                 Toast.makeText(this, "Next round", Toast.LENGTH_SHORT).show();

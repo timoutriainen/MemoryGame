@@ -5,26 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".StartGameActivity"
-    android:background="@color/backgroundBlack">
+    android:background="@drawable/kisdon_hill">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
+        android:textSize="24sp"
+        android:layout_centerInParent="true"
         android:id="@+id/bestResultTextView"
         android:textColor="@color/bestResultTextColor"
         android:layout_above="@+id/startButton"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="150dp"
         />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@id/startButton"
-        android:background="@color/buttonColor"
+        android:background="@color/gameGreen"
         android:layout_centerInParent="true"
-        android:textSize="24dp"
-        android:text="Start"
+        android:textSize="24sp"
+        android:text="@string/start_string"
         />
 
 

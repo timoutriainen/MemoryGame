@@ -8,5 +8,6 @@
     <color name="backgroundBlack">#000000</color>
     <color name="buttonColor">#580555</color>
     <color name="bestResultTextColor">#108F07</color>
+    <color name="currentResultTextColor">#108F07</color>
     <color name="backgroundSecond">#AA4577</color>
 </resources>
